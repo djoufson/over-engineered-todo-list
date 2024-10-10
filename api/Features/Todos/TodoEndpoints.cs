@@ -5,5 +5,6 @@ public static class TodoEndpoints
     {
         routes.MapPost("/todos", CreateTodo.Handle);
         routes.MapGet("/todos", GetAllTodos.Handle);
+        routes.MapGet("/todos/{id:guid}", GetSingleTodo.Handle);
     }
 }

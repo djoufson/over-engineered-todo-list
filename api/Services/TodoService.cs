@@ -27,4 +27,11 @@ public class TodoService(TodoDbContext dbContext)
             .Take(size)
             .ToArrayAsync(cancellationToken);
     }
+
+    public async Task<Todo?> GetAsync(Guid id, CancellationToken cancellationToken)
+    {
+        return await _dbContext.Tasks
+            .Include(t => t.Tags)
+            .FirstOrDefaultAsync(t => t.Id == id, cancellationToken);
+    }
 }
