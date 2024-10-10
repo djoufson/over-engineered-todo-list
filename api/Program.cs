@@ -35,6 +35,9 @@ app.UseCors();
 
 app.UseHttpsRedirection();
 
-app.MapTodoEndpoints();
+app
+    .MapGroup("todos")
+    .WithTags("Todos")
+    .MapTodoEndpoints();
 
 app.Run();

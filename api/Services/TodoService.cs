@@ -34,4 +34,22 @@ public class TodoService(TodoDbContext dbContext)
             .Include(t => t.Tags)
             .FirstOrDefaultAsync(t => t.Id == id, cancellationToken);
     }
+
+    public async Task<bool> DeleteAsync(Guid id, CancellationToken cancellationToken)
+    {
+        return await _dbContext.Tasks
+            .Where(t => t.Id == id)
+            .ExecuteDeleteAsync(cancellationToken) > 0;
+    }
+
+    public async Task<bool> UpdateAsync(Guid id, UpdateTodo.UpdateTodoRequest request, CancellationToken cancellationToken)
+    {
+        return await _dbContext.Tasks
+            .Where(t => t.Id == id)
+            .ExecuteUpdateAsync(s => s
+                .SetProperty(t => t.Title, request.Title)
+                .SetProperty(t => t.DueDate, request.DueDate)
+                .SetProperty(t => t.Priority, request.Priority)
+            , cancellationToken) > 0;
+    }
 }

@@ -1,10 +1,14 @@
 namespace api.Features.Todos;
 public static class TodoEndpoints
 {
-    public static void MapTodoEndpoints(this IEndpointRouteBuilder routes)
+    public static IEndpointRouteBuilder MapTodoEndpoints(this IEndpointRouteBuilder routes)
     {
-        routes.MapPost("/todos", CreateTodo.Handle);
-        routes.MapGet("/todos", GetAllTodos.Handle);
-        routes.MapGet("/todos/{id:guid}", GetSingleTodo.Handle);
+        routes.MapPost("/", CreateTodo.Handle);
+        routes.MapGet("/", GetAllTodos.Handle);
+        routes.MapGet("/{id:guid}", GetSingleTodo.Handle);
+        routes.MapDelete("/{id:guid}", DeleteTodo.Handle);
+        routes.MapPut("/{id:guid}", UpdateTodo.Handle);
+
+        return routes;
     }
 }
