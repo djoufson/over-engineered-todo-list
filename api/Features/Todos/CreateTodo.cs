@@ -7,9 +7,10 @@ public class CreateTodo
 {
     public static async Task<IResult> Handle(
         [FromBody] Request request,
-        [FromServices] TodoService service)
+        [FromServices] TodoService service,
+        CancellationToken cancellationToken)
     {
-        var todo = await service.CreateAsync(request);
+        var todo = await service.CreateAsync(request, cancellationToken);
         return Results.Ok(todo);
     }
 
