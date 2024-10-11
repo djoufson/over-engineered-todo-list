@@ -3,7 +3,7 @@ import { getAllTodos } from '@/services/api';
 import type { Todo } from '@/types/Todo';
 import TodoItem from '@/components/TodoItem.vue'
 import type { PagedList } from '@/types/pagedList';
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 import Pagination from '@/components/Pagination.vue';
 
 const page = ref(1);
@@ -14,18 +14,24 @@ const onTodoDeleted = (id:string) => {
     todos.value.items = [...todos.value.items.filter(t => t.id != id)];
   }, 300);
 }
+
+const onTodoCreated = async (todo:Todo) => {
+  todos.value = await getAllTodos(page.value, size.value)
+}
 </script>
 
 <template>
   <div class="w-full flex flex-col gap-3 mt-8 overflow-x-hidden">
     <TodoItem
-      :onTodoDeleted="() => {}"/>
+      :onTodoDeleted="() => {}"
+      :onTodoCreated="onTodoCreated"/>
 
     <div class="mt-8">
       <div v-for="todo in todos.items" :key="todo.id" class="w-full">
         <TodoItem
           :todo="todo"
-          :onTodoDeleted="onTodoDeleted"/>
+          :onTodoDeleted="onTodoDeleted"
+          :onTodoCreated="() => {}"/>
       </div>
     </div>
     <Pagination

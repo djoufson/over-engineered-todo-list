@@ -26,6 +26,7 @@ export const getAllTodos = async (page:number = 1, size:number = 5) : Promise<Pa
 export const updateTodo = async (todo:Todo): Promise<boolean> => {
   const url = `${apiBaseUrl}/todos/${todo.id}`;
   const response = await fetch(url, {
+    method: 'PUT',
     headers: {
       'Content-Type': 'application/json'
     },
