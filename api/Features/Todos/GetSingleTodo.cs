@@ -1,3 +1,4 @@
+using api.Contracts;
 using api.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,7 +10,12 @@ public class GetSingleTodo
         [FromServices] TodoService service,
         CancellationToken cancellationToken)
     {
-        var todos = await service.GetAsync(id, cancellationToken);
-        return Results.Ok(todos);
+        var todo = await service.GetAsync(id, cancellationToken);
+        if(todo is null)
+        {
+            return Results.NotFound();
+        }
+
+        return Results.Ok(TodoDto.FromTodo(todo));
     }
 }

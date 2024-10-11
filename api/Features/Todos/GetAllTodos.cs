@@ -1,3 +1,4 @@
+using api.Contracts;
 using api.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,6 +12,9 @@ public class GetAllTodos
         [FromQuery] int size = 5)
     {
         var todos = await service.GetAllAsync(page, size, cancellationToken);
-        return Results.Ok(todos);
+        var todoDtos = todos
+            .Select(TodoDto.FromTodo);
+
+        return Results.Ok(todoDtos);
     }
 }
