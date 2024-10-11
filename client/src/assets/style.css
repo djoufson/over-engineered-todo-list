@@ -1,0 +1,29 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.todo-item {
+  position: relative;
+  max-height: 200px;
+  transition: all ease-in 250;
+}
+
+.todo-item.deleted {
+  transform: translateX(-100%);
+  opacity: 0;
+  max-height: 0;
+}
+
+.todo-item .todo-action {
+  overflow-y: hidden;
+}
+
+.todo-item .todo-action > * {
+  opacity: 0;
+  transform: translateY(100%);
+}
+
+.todo-item:hover .todo-action > * {
+  opacity: 1;
+  transform: translateY(0);
+}

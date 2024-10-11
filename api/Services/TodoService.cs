@@ -1,6 +1,7 @@
 using api.Data;
 using api.Features.Todos;
 using api.Models;
+using api.Utilities;
 using Microsoft.EntityFrameworkCore;
 
 namespace api.Services;
@@ -18,14 +19,20 @@ public class TodoService(TodoDbContext dbContext)
         return todo;
     }
 
-    public async Task<Todo[]> GetAllAsync(int page, int size, CancellationToken cancellationToken)
+    public async Task<PagedList<Todo>> GetAllAsync(int page, int size, CancellationToken cancellationToken)
     {
-        return await _dbContext.Tasks
+        var query = _dbContext.Tasks
             .Include(t => t.Tags)
-            .OrderByDescending(t => t.CreatedAt)
+            .OrderByDescending(t => t.CreatedAt);
+
+        var totalCount = await query.CountAsync(cancellationToken);
+
+        var data = await query
             .Skip((page - 1) * size)
             .Take(size)
             .ToArrayAsync(cancellationToken);
+
+        return new PagedList<Todo>(page, size, totalCount, data);
     }
 
     public async Task<Todo?> GetAsync(Guid id, CancellationToken cancellationToken)

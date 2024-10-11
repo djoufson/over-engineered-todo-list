@@ -1,3 +1,4 @@
+using api.Contracts;
 using api.Models;
 using api.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -11,7 +12,7 @@ public class CreateTodo
         CancellationToken cancellationToken)
     {
         var todo = await service.CreateAsync(request, cancellationToken);
-        return Results.Ok(todo);
+        return Results.Ok(TodoDto.FromTodo(todo));
     }
 
     public record Request(
