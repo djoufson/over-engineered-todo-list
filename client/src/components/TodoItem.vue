@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { createTodo, updateTodo } from '@/services/api';
-import { emptyTodo, type Todo } from '@/types/Todo';
+import type { Todo } from '@/types/Todo';
+import { emptyTodo } from '@/utilities/todoUtilities';
 import { ref } from 'vue';
 
 const props = defineProps<{

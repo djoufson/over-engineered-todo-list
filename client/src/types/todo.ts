@@ -10,15 +10,3 @@ export type Todo = {
   tags : string[],
   priority : TodoPriority
 }
-
-export const emptyTodo = () => {
-  return {
-    id : "",
-    title : "",
-    createdAt : new Date(),
-    dueDate : new Date(),
-    status : TodoStatus.Pending,
-    tags : [],
-    priority : TodoPriority.Low
-  }
-}

@@ -1,13 +1,18 @@
 import type { Todo } from "@/types/Todo";
 
-const apiBaseUrl = import.meta.env.API_BASE_URL;
+const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
 
 export const getAllTodos = async () : Promise<Todo[]> => {
-  var response = await fetch(`${apiBaseUrl}/todos`);
-  if(response.ok) {
-    var data = await response.json();
-    return data as Todo[];
-  } else {
+  try {
+    var response = await fetch(`${apiBaseUrl}/todos`);
+    if(response.ok) {
+      var data = await response.json();
+      return data as Todo[];
+    } else {
+      return [];
+    } 
+  } catch (error) {
+    console.error(error);
     return [];
   }
 };
