@@ -1,3 +1,21 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.todo-item {
+  position: relative;
+}
+
+.todo-item .todo-action {
+  overflow-y: hidden;
+}
+
+.todo-item .todo-action > * {
+  opacity: 0;
+  transform: translateY(100%);
+}
+
+.todo-item:hover .todo-action > * {
+  opacity: 1;
+  transform: translateY(0);
+}
