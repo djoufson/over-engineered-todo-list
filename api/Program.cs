@@ -1,5 +1,6 @@
 using api.Data;
 using api.Extensions;
+using api.Features.Tags;
 using api.Features.Todos;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -39,5 +40,10 @@ app
     .MapGroup("todos")
     .WithTags("Todos")
     .MapTodoEndpoints();
+
+app
+    .MapGroup("tags")
+    .WithTags("Tags")
+    .MapTagsEndpoints();
 
 app.Run();
