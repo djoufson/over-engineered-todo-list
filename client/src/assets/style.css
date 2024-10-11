@@ -4,6 +4,14 @@
 
 .todo-item {
   position: relative;
+  max-height: 200px;
+  transition: all ease-in 250;
+}
+
+.todo-item.deleted {
+  transform: translateX(-100%);
+  opacity: 0;
+  max-height: 0;
 }
 
 .todo-item .todo-action {

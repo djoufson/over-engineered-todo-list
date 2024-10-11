@@ -8,16 +8,26 @@ import Pagination from '@/components/Pagination.vue';
 
 const page = ref(1);
 const size = ref(5);
-const todos: PagedList<Todo> = await getAllTodos(page.value, size.value);
+const todos = ref<PagedList<Todo>>(await getAllTodos(page.value, size.value));
+const onTodoDeleted = (id:string) => {
+  setTimeout(() => {
+    todos.value.items = [...todos.value.items.filter(t => t.id != id)];
+  }, 300);
+}
 </script>
 
 <template>
-  <div class="w-full flex flex-col gap-3 mt-8">
-    <TodoItem />
-    <div v-for="todo in todos.items" :key="todo.id" class="w-full">
-      <TodoItem :todo="todo" />
-    </div>
+  <div class="w-full flex flex-col gap-3 mt-8 overflow-x-hidden">
+    <TodoItem
+      :onTodoDeleted="() => {}"/>
 
+    <div class="mt-8">
+      <div v-for="todo in todos.items" :key="todo.id" class="w-full">
+        <TodoItem
+          :todo="todo"
+          :onTodoDeleted="onTodoDeleted"/>
+      </div>
+    </div>
     <Pagination
       :current-page="todos.page"
       :current-size="todos.size"

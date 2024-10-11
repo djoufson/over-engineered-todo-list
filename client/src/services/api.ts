@@ -46,3 +46,12 @@ export const createTodo = async (todo:Todo): Promise<Todo> => {
   });
   return await response.json();
 }
+
+export const deleteTodo = async (id:string): Promise<boolean> => {
+  const url = `${apiBaseUrl}/todos/${id}`;
+  const response = await fetch(url, {
+    method: 'DELETE'
+  });
+
+  return response.ok;
+}
