@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { createTodo, deleteTodo, getTags, updateTodo } from '@/services/api';
+import { createTodo, deleteTodo, getTags, unassignTag, updateTodo } from '@/services/api';
 import type { Todo } from '@/types/Todo';
 import { emptyTodo } from '@/utilities/todoUtilities';
 import { formatDate } from '@/utilities/dateUtilities';
@@ -77,8 +77,17 @@ function hideTagsPopup() {
 }
 
 function onLoseHover() {
-  console.log("Focus out");
   hideTagsPopup();
+}
+
+async function removeTag(tag:string) {
+  if(props.todo != null && props.todo != undefined) {
+    const success = await unassignTag(model.value.id, tag);
+    if(!success) {
+      return;
+    }
+  }
+  model.value.tags = model.value.tags.filter(t => t != tag);
 }
 
 </script>
@@ -104,10 +113,10 @@ function onLoseHover() {
     </div>
     <div class="flex justify-between px-2 mt-1 gap-4">
       <div class="flex gap-1 flex-wrap cursor-pointer">
-        <span v-for="tag in model.tags" class="flex gap-1 items-center text-xs p-1 bg-orange-300">
+        <button @click="removeTag(tag)" v-for="tag in model.tags" class="flex gap-1 items-center text-xs p-1 bg-orange-300">
           {{ tag }}
           <Icon icon="mdi-light:cancel" />
-        </span>
+        </button>
       </div>
       <span v-if="props.todo" class="text-xs">{{ formatDate(model.dueDate ?? new Date()) }}</span>
     </div>

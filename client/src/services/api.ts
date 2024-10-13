@@ -68,3 +68,17 @@ export const getTags = async (tagFilter?:string, excludedTags?:string[]): Promis
   const data = await response.json() as Tag[];
   return data ? data : [];
 }
+
+export const unassignTag = async (todoId:string, tag:string): Promise<boolean> => {
+  const url = `${apiBaseUrl}/todos/${todoId}/unassign`;
+  const data = { tag };
+  const response = await fetch(url, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(data)
+  });
+
+  return response.ok;
+}
