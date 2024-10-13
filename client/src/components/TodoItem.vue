@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { createTodo, deleteTodo, getTags, unassignTag, updateTodo } from '@/services/api';
+import { assignTag, createTodo, deleteTodo, getTags, unassignTag, updateTodo } from '@/services/api';
 import type { Todo } from '@/types/Todo';
 import { emptyTodo } from '@/utilities/todoUtilities';
 import { formatDate } from '@/utilities/dateUtilities';
@@ -66,7 +66,8 @@ function toggleTags() {
   }
 }
 
-function showTagsPopup() {
+async function showTagsPopup() {
+  await onTagFiltered();
   tagsToggleClass.value = "rotate-180";
   popupToggledClass.value = "toggled";
 }
@@ -88,6 +89,22 @@ async function removeTag(tag:string) {
     }
   }
   model.value.tags = model.value.tags.filter(t => t != tag);
+}
+
+async function addTag() {
+  if(filterTag.value === "" || filterTag.value === null || filterTag.value === undefined) {
+    return;
+  }
+
+  if(props.todo != null && props.todo != undefined) {
+    const success = await assignTag(model.value.id, filterTag.value);
+    if(!success) {
+      return;
+    }
+  }
+
+  model.value.tags.push(filterTag.value);
+  filterTag.value = "";
 }
 
 </script>
@@ -112,7 +129,7 @@ async function removeTag(tag:string) {
       </div>
     </div>
     <div class="flex justify-between px-2 mt-1 gap-4">
-      <div class="flex gap-1 flex-wrap cursor-pointer">
+      <div class="flex gap-1 flex-wrap">
         <button @click="removeTag(tag)" v-for="tag in model.tags" class="flex gap-1 items-center text-xs p-1 bg-orange-300">
           {{ tag }}
           <Icon icon="mdi-light:cancel" />
@@ -122,7 +139,7 @@ async function removeTag(tag:string) {
     </div>
     <!-- Tags popup -->
     <div :class="`${popupToggledClass} tags-popup flex flex-col gap-2 absolute right-0 top-[60px] min-w-[33%] max-w-[50%] w-full p-4 rounded-lg shadow bg-white transition-all`">
-      <input type="text" placeholder="Add a tag" v-model="filterTag" @input="onTagFiltered" class="w-full text-sm">
+      <input @keydown.enter="addTag" type="text" placeholder="Add a tag" v-model="filterTag" @input="onTagFiltered" class="w-full text-sm">
       <div>
         <button v-for="tag in filteredTags" class="flex gap-1 items-center text-xs p-1 bg-orange-300">
           {{ tag.name }}
