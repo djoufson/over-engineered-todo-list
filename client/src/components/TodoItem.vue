@@ -17,6 +17,7 @@ const deletedClass = ref("");
 const tagsToggleClass = ref("");
 const popupToggledClass = ref("");
 const filterTag = ref("");
+const tagInputField = ref<HTMLInputElement | null>(null);
 const model = props.todo === undefined || props.todo === null ? ref(emptyTodo()) : ref(props.todo);
 const filteredTags = ref(await getTags(filterTag.value, model.value.tags));
 
@@ -68,6 +69,7 @@ function toggleTags() {
 
 async function showTagsPopup() {
   await onTagFiltered();
+  tagInputField.value?.focus();
   tagsToggleClass.value = "rotate-180";
   popupToggledClass.value = "toggled";
 }
@@ -91,19 +93,19 @@ async function removeTag(tag:string) {
   model.value.tags = model.value.tags.filter(t => t != tag);
 }
 
-async function addTag() {
-  if(filterTag.value === "" || filterTag.value === null || filterTag.value === undefined) {
+async function addTag(tag:string) {
+  if(tag === "" || tag === null || tag === undefined) {
     return;
   }
 
   if(props.todo != null && props.todo != undefined) {
-    const success = await assignTag(model.value.id, filterTag.value);
+    const success = await assignTag(model.value.id, tag);
     if(!success) {
       return;
     }
   }
 
-  model.value.tags.push(filterTag.value);
+  model.value.tags.push(tag);
   filterTag.value = "";
 }
 
@@ -129,7 +131,7 @@ async function addTag() {
       </div>
     </div>
     <div class="flex justify-between px-2 mt-1 gap-4">
-      <div class="flex gap-1 flex-wrap">
+      <div class="flex gap-1 flex-wrap w-[70%]">
         <button @click="removeTag(tag)" v-for="tag in model.tags" class="flex gap-1 items-center text-xs p-1 bg-orange-300">
           {{ tag }}
           <Icon icon="mdi-light:cancel" />
@@ -139,9 +141,9 @@ async function addTag() {
     </div>
     <!-- Tags popup -->
     <div :class="`${popupToggledClass} tags-popup flex flex-col gap-2 absolute right-0 top-[60px] min-w-[33%] max-w-[50%] w-full p-4 rounded-lg shadow bg-white transition-all`">
-      <input @keydown.enter="addTag" type="text" placeholder="Add a tag" v-model="filterTag" @input="onTagFiltered" class="w-full text-sm">
-      <div>
-        <button v-for="tag in filteredTags" class="flex gap-1 items-center text-xs p-1 bg-orange-300">
+      <input ref="tagInputField" @keydown.enter="addTag(filterTag)" type="text" placeholder="Add a tag" v-model="filterTag" @input="onTagFiltered" class="w-full text-sm">
+      <div class="flex gap-1 flex-wrap">
+        <button v-for="tag in filteredTags" @click="addTag(tag.name)" class="flex gap-1 items-center text-xs p-1 bg-orange-300">
           {{ tag.name }}
         </button>
       </div>
