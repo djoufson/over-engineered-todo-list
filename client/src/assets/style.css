@@ -27,3 +27,15 @@
   opacity: 1;
   transform: translateY(0);
 }
+
+.tags-popup {
+  opacity: 0;
+  transform: translateY(100%);
+  z-index: -10;
+}
+
+.tags-popup.toggled {
+  opacity: 1;
+  transform: translateY(0);
+  z-index: 10;
+}

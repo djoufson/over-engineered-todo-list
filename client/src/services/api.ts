@@ -1,4 +1,5 @@
 import { PagedList } from "@/types/pagedList";
+import type { Tag } from "@/types/tag";
 import type { Todo } from "@/types/Todo";
 
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
@@ -55,4 +56,15 @@ export const deleteTodo = async (id:string): Promise<boolean> => {
   });
 
   return response.ok;
+}
+
+export const getTags = async (tagFilter?:string, excludedTags?:string[]): Promise<Tag[]> => {
+  const url = `${apiBaseUrl}/tags?tagFilter=${tagFilter}&excludedTags=${excludedTags?.join("&excludedTags=")}`;
+  const response = await fetch(url);
+  if (!response.ok) {
+    throw new Error('Failed to fetch data');
+  }
+
+  const data = await response.json() as Tag[];
+  return data ? data : [];
 }
