@@ -1,0 +1,27 @@
+stages:
+  - build
+  # - deploy
+
+# variables:
+#   DOTNET_ROOT: "/usr/share/dotnet"
+#   DOTNET_VERSION: "8.0"
+
+build:
+  stage: build
+  image: mcr.microsoft.com/dotnet/sdk:8.0
+  script:
+    - dotnet restore
+    - dotnet build --configuration Release
+    - dotnet publish ./api -c Release -o publish
+  only:
+    - develop
+    - main
+
+# deploy_main:
+#   stage: deploy
+#   image: mcr.microsoft.com/azure-cli
+#   script:
+#     - az login --service-principal -u "$AZURE_PROD_CLIENT_ID" -p "$AZURE_PROD_CLIENT_SECRET" --tenant "$AZURE_PROD_TENANT_ID"
+#     - az webapp deploy --resource-group RESOURCE_GROUP --name PROD_APP_SERVICE_NAME --src-path ./publish --type zip
+#   only:
+#     - main
