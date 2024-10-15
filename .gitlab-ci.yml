@@ -1,10 +1,6 @@
 stages:
   - build
-  # - deploy
-
-# variables:
-#   DOTNET_ROOT: "/usr/share/dotnet"
-#   DOTNET_VERSION: "8.0"
+  - deploy
 
 build:
   stage: build
@@ -17,11 +13,11 @@ build:
     - develop
     - main
 
-# deploy_main:
-#   stage: deploy
-#   image: mcr.microsoft.com/azure-cli
-#   script:
-#     - az login --service-principal -u "$AZURE_PROD_CLIENT_ID" -p "$AZURE_PROD_CLIENT_SECRET" --tenant "$AZURE_PROD_TENANT_ID"
-#     - az webapp deploy --resource-group RESOURCE_GROUP --name PROD_APP_SERVICE_NAME --src-path ./publish --type zip
-#   only:
-#     - main
+deploy_main:
+  stage: deploy
+  image: mcr.microsoft.com/azure-cli
+  script:
+    - az login --service-principal -u "$AZURE_CLIENT_ID" -p "$AZURE_CLIENT_SECRET" --tenant "$AZURE_TENANT_ID"
+    - az webapp deploy --resource-group RESOURCE_GROUP --name over-engineered-todo-list --src-path ./publish --type zip
+  only:
+    - main
