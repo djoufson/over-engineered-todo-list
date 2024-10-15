@@ -112,7 +112,7 @@ async function addTag(tag:string) {
 </script>
 
 <template>
-  <div :class="`todo-item ${deletedClass} transition-all relative`" @mouseleave="onLoseHover">
+  <div :class="`todo-item ${deletedClass} transition-all relative pb-2`" @mouseleave="onLoseHover">
     <div class="flex gap-[2px] w-full border-2 border-blue-300 rounded-lg p-2 items-center">
       <input type="text" placeholder="Add a new task" @keydown.enter="onSave" @focusin="isFocus = true"
         @focusout="onFocusOut" v-model="model.title" class="bg-transparent p-2 w-full focus:outline-none">
