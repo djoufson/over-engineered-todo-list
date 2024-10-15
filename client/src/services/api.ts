@@ -1,4 +1,5 @@
 import { PagedList } from "@/types/pagedList";
+import type { Tag } from "@/types/tag";
 import type { Todo } from "@/types/Todo";
 
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
@@ -52,6 +53,45 @@ export const deleteTodo = async (id:string): Promise<boolean> => {
   const url = `${apiBaseUrl}/todos/${id}`;
   const response = await fetch(url, {
     method: 'DELETE'
+  });
+
+  return response.ok;
+}
+
+export const getTags = async (tagFilter?:string, excludedTags?:string[]): Promise<Tag[]> => {
+  const url = `${apiBaseUrl}/tags?tagFilter=${tagFilter}&excludedTags=${excludedTags?.join("&excludedTags=")}`;
+  const response = await fetch(url);
+  if (!response.ok) {
+    throw new Error('Failed to fetch data');
+  }
+
+  const data = await response.json() as Tag[];
+  return data ? data : [];
+}
+
+export const unassignTag = async (todoId:string, tag:string): Promise<boolean> => {
+  const url = `${apiBaseUrl}/todos/${todoId}/unassign`;
+  const data = { tag };
+  const response = await fetch(url, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(data)
+  });
+
+  return response.ok;
+}
+
+export const assignTag = async (todoId:string, tag:string): Promise<boolean> => {
+  const url = `${apiBaseUrl}/todos/${todoId}/assign`;
+  const data = { tag };
+  const response = await fetch(url, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(data)
   });
 
   return response.ok;

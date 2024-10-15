@@ -12,6 +12,8 @@ public class Tag
 
     public Tag(string name)
     {
-        Name = name;
+        Name = name
+            .Trim()
+            .ToLower();
     }
 }

@@ -7,7 +7,7 @@
 
   onMounted(() => {
     setTimeout(() => {
-      console.log(anim.value.goToAndPlay(150, true))
+      console.log(anim.value?.goToAndPlay(150, true))
       anim.value
     }, 500)
   })
