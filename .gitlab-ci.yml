@@ -18,6 +18,6 @@ deploy_main:
   image: mcr.microsoft.com/azure-cli
   script:
     - az login --service-principal -u "$AZURE_CLIENT_ID" -p "$AZURE_CLIENT_SECRET" --tenant "$AZURE_TENANT_ID"
-    - az webapp deploy --resource-group RESOURCE_GROUP --name over-engineered-todo-list --src-path ./publish --type zip
+    - az webapp deploy --resource-group djoufson-learnings --name over-engineered-todo-list --src-path ./publish --type zip
   only:
     - main
