@@ -21,6 +21,8 @@ deploy_main:
   stage: deploy
   image: mcr.microsoft.com/azure-cli
   script:
+    - echo "Unzipping the artifacts..."
+    - unzip artifacts.zip -d .
     - az login --service-principal -u "$AZURE_CLIENT_ID" -p "$AZURE_CLIENT_SECRET" --tenant "$AZURE_TENANT_ID"
     - az webapp deploy --resource-group djoufson-learnings --name over-engineered-todo-list --src-path ./publish --type zip
   only:
