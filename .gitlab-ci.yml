@@ -9,6 +9,10 @@ build:
     - dotnet restore
     - dotnet build --configuration Release
     - dotnet publish ./api -c Release -o publish
+  artifacts:
+    paths:
+      - publish/
+    expire_in: 1 hour
   only:
     - develop
     - main
@@ -21,3 +25,5 @@ deploy_main:
     - az webapp deploy --resource-group djoufson-learnings --name over-engineered-todo-list --src-path ./publish --type zip
   only:
     - main
+  dependencies:
+    - build
