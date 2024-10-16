@@ -23,6 +23,8 @@ deploy_main:
   script:
     - echo "Install necessary packages (Python, pip, and zip)"
     - apk update && apk add --no-cache py3-pip gcc musl-dev python3-dev libffi-dev openssl-dev cargo make
+    - python3 -m venv /venv
+    - source /venv/bin/activate
     - pip install --upgrade pip
     - pip install azure-cli
     - echo "Compress ad deploy the app"
