@@ -4,14 +4,14 @@ stages:
 
 build:
   stage: build
-  image: mcr.microsoft.com/dotnet/sdk:8.0
+  image: mcr.microsoft.com/dotnet/sdk:8.0-alpine
   script:
     - dotnet restore
     - dotnet build --configuration Release
-    - dotnet publish ./api -c Release -o publish
+    - dotnet publish ./api -c Release -o output
   artifacts:
     paths:
-      - publish/
+      - output/
     expire_in: 1 hour
   only:
     - develop
@@ -19,10 +19,16 @@ build:
 
 deploy_main:
   stage: deploy
-  image: mcr.microsoft.com/azure-cli
+  image: alpine:latest
   script:
+    - apk update && apk add --no-cache curl zip bash
+    - curl -sL https://aka.ms/InstallAzureCLIDeb | bash
+    - apk add --no-cache libintl gettext ca-certificates openssl bash && wget -q https://aka.ms/InstallAzureCLIDeb -O install.sh && bash install.sh
+    - echo "Installing zip utility..."
+    - apk add --no-cache zip
+    - cd output && zip -r ../deploy.zip . && cd ..
     - az login --service-principal -u "$AZURE_CLIENT_ID" -p "$AZURE_CLIENT_SECRET" --tenant "$AZURE_TENANT_ID"
-    - az webapp deploy --resource-group djoufson-learnings --name over-engineered-todo-list --src-path ./artifacts.zip --type zip
+    - az webapp deploy --resource-group djoufson-learnings --name over-engineered-todo-list --src-path artifacts.zip --type zip
   only:
     - main
   dependencies:

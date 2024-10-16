@@ -1,7 +1,10 @@
 {
     "cSpell.words": [
+        "gettext",
         "iconify",
+        "libintl",
         "lottie",
+        "openssl",
         "Sqlite",
         "todos",
         "Todos"
