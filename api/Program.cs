@@ -1,5 +1,6 @@
 using api.Data;
 using api.Extensions;
+using api.Features.Demo;
 using api.Features.Tags;
 using api.Features.Todos;
 
@@ -45,5 +46,10 @@ app
     .MapGroup("tags")
     .WithTags("Tags")
     .MapTagsEndpoints();
+
+app
+    .MapGroup("demo")
+    .WithTags("Demo")
+    .MapDemoEndpoints();
 
 app.Run();
