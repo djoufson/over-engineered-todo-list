@@ -22,15 +22,15 @@ deploy_main:
   image: alpine:latest
   script:
     - echo "Install necessary packages (Python, pip, and zip)"
-    - apk update && apk add --no-cache py3-pip gcc musl-dev python3-dev libffi-dev openssl-dev cargo make
+    - apk update && apk add --no-cache py3-pip gcc musl-dev python3-dev libffi-dev openssl-dev cargo make zip
     - python3 -m venv /venv
     - source /venv/bin/activate
     - pip install --upgrade pip
     - pip install azure-cli
-    - echo "Compress ad deploy the app"
+    - echo "Compress and deploy the app"
     - cd output && zip -r ../deploy.zip . && cd ..
     - az login --service-principal -u "$AZURE_CLIENT_ID" -p "$AZURE_CLIENT_SECRET" --tenant "$AZURE_TENANT_ID"
-    - az webapp deploy --resource-group djoufson-learnings --name over-engineered-todo-list --src-path artifacts.zip --type zip
+    - az webapp deploy --resource-group djoufson-learnings --name over-engineered-todo-list --src-path deploy.zip --type zip
   only:
     - main
   dependencies:
