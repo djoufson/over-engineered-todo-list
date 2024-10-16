@@ -21,11 +21,10 @@ deploy_main:
   stage: deploy
   image: alpine:latest
   script:
-    - apk update && apk add --no-cache curl zip bash
-    - curl -sL https://aka.ms/InstallAzureCLIDeb | bash
-    - apk add --no-cache libintl gettext ca-certificates openssl bash && wget -q https://aka.ms/InstallAzureCLIDeb -O install.sh && bash install.sh
-    - echo "Installing zip utility..."
-    - apk add --no-cache zip
+    - echo "Install necessary packages (Python, pip, and zip)"
+    - apk update && apk add --no-cache python3 py3-pip zip
+    - pip install --upgrade azure-cli
+    - echo "Compress ad deploy the app"
     - cd output && zip -r ../deploy.zip . && cd ..
     - az login --service-principal -u "$AZURE_CLIENT_ID" -p "$AZURE_CLIENT_SECRET" --tenant "$AZURE_TENANT_ID"
     - az webapp deploy --resource-group djoufson-learnings --name over-engineered-todo-list --src-path artifacts.zip --type zip
