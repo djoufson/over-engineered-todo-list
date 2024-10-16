@@ -22,8 +22,9 @@ deploy_main:
   image: alpine:latest
   script:
     - echo "Install necessary packages (Python, pip, and zip)"
-    - apk update && apk add --no-cache python3 py3-pip zip
-    - pip install --upgrade azure-cli
+    - apk update && apk add --no-cache py3-pip gcc musl-dev python3-dev libffi-dev openssl-dev cargo make
+    - pip install --upgrade pip
+    - pip install azure-cli
     - echo "Compress ad deploy the app"
     - cd output && zip -r ../deploy.zip . && cd ..
     - az login --service-principal -u "$AZURE_CLIENT_ID" -p "$AZURE_CLIENT_SECRET" --tenant "$AZURE_TENANT_ID"
